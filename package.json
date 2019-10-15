@@ -1,0 +1,22 @@
+{
+  "name": "pricetracker",
+  "version": "1.0.0",
+  "description": "This is a web application that will be used for tracking the price changes in different items in a website",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/divyavijayan103/PriceTracker.git"
+  },
+  "author": "Divya Vijayan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/divyavijayan103/PriceTracker/issues"
+  },
+  "homepage": "https://github.com/divyavijayan103/PriceTracker#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
