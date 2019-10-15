@@ -4,6 +4,7 @@
   "description": "This is a web application that will be used for tracking the price changes in different items in a website",
   "main": "app.js",
   "scripts": {
+    "start": "nodemon ./bin/www",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,6 +18,12 @@
   },
   "homepage": "https://github.com/divyavijayan103/PriceTracker#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "pg": "^7.12.1",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^5.19.6"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.3"
   }
 }
