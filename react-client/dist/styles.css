@@ -23,3 +23,63 @@ header {
   .app-content{
     margin-left:50px;
   }
+  .margin{
+    text-align: center !important;
+    margin-top: 200px !important;
+  }
+  .alert{
+    position: absolute !important;
+    top:150px;
+    left:38%;
+  }
+  h2{
+    text-align: center;
+  }
+  .nav-sprite {
+    background-image: url(https://images-na.ssl-images-amazon.com/images/G/01/gno/sprites/nav-sprite-global_bluebeacon-2x_optimized_layout1._CB468670774_.png);
+    background-size: 350px;
+  }
+.strikethrough{
+  text-decoration: line-through;
+}
+.nav-logo-base {
+    float: left;
+    text-indent: -500px;
+    background-position: -10px -51px;
+    width: 97px;
+    height: 30px;
+}
+.navlogo{
+  width: 97px;
+    height: 63px;
+
+}
+  .image{width: 100%}
+  .card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    max-width: 300px;
+    margin: auto;
+    text-align: center;
+    font-family: arial;
+  }
+  
+  .price {
+    color: grey;
+    font-size: 22px;
+  }
+  
+  .card button {
+    border: none;
+    outline: 0;
+    padding: 12px;
+    color: white;
+    background-color: #000;
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+    font-size: 18px;
+  }
+  
+  .card button:hover {
+    opacity: 0.7;
+  }
