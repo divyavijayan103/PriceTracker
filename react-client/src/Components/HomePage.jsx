@@ -27,7 +27,6 @@ class HomePage extends Component {
       });
   }
   render() {
-    debugger;
     const productData = this.state.productData;
     let ProductNotFoundError = productData && productData.imageUrl == '';
     return (
