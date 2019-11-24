@@ -1,8 +1,21 @@
 import React, { Component } from 'react';
+import SavedProducts from "./SavedProducts";
+
 class HomePage extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+  }
+  handleButtonClick({imageUrl,dealprice,productTitle,amazonPrice,salesPrice}){
+    let data={
+      imageUrl,
+      dealprice,
+      amazonPrice,
+      productTitle,
+      url:this.state.url,
+      salesPrice
+    }
+    this.props.addWatchListData(data);
   }
   handleSearchButtonClick(e) {
     let _this = this;
@@ -12,18 +25,26 @@ class HomePage extends Component {
       return;
     }
     let completeurl = `/pricetracker/search?url=${encodeURI(url)}`;
-    fetch(completeurl)
+    fetch(completeurl,{
+      headers: {
+        'oauthtoken': _this.props.authToken
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    })
       .then(function (response) {
         // The response is a Response instance.
         // You parse the data into a useable format using `.json()`
         return response.json();
       }).then(function (data) {
+        if(data && data.status===401){
+          _this.props.history.push('/login');
+        }else{
         if (data && data.message && data.message === "success") {
-          _this.setState({ productData: data.productData })
+          _this.setState({ productData: data.productData,url:url })
         }
         else {
           _this.props.history.push('/errorpage');
-        }
+        }}
       });
   }
   render() {
@@ -55,12 +76,16 @@ class HomePage extends Component {
             {productData.AmazonPrice && productData.AmazonPrice &&
               <p className="price">Amazon Price: {productData.AmazonPrice}</p>
             }
+            {productData.salesPrice &&
+              <p className="price">Sales Price: {productData.salesPrice}</p>
+            }
             {productData.reviews && productData.reviews != '' &&
               <p>{productData.reviews}</p>
             }
-            <p><button>Add to Watch List</button></p>
+            <p><button onClick={()=>{this.handleButtonClick(productData)}}>Add to Watch List</button></p>
           </div>
         }
+        <SavedProducts savedProductdata={this.props.savedProductData}/>
       </div>
     )
   }
