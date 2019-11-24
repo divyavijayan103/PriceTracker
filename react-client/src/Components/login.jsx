@@ -12,22 +12,28 @@ class LoginPage extends Component {
         for (const pair of new FormData(e.target)) {
             data.append(pair[0], pair[1].trim());
         }
-
-        fetch('./pricetracker/login', {
+        
+        fetch('/pricetracker/login', {
             method: 'post',
             body: data,
         })
-            .then((data) => {
-                if (data && data.status === 200) {
+            .then((response) => {
+                return response.json();
+            }).then(function (data) {
+                if(data.status===200 && data.authToken){
+                    _this.props.updateJWTToken(data.authToken);
+                    _this.props.updateProductData(data.savedProductData);
                     _this.props.history.push('/homepage');
                 }
-                else if (data && data.status === 401) {
-                    _this.setState({ message: "loginError" });
-                }
-                else {
-                    _this.props.history.push('/errorpage');
-                }
-            });
+                
+                    else if (data && data.status === 401) {
+                        _this.setState({ message: "loginError" });
+                    }
+                    else {
+                        _this.props.history.push('/errorpage');
+                    }
+                
+              });;
 
     }
 
