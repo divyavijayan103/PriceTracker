@@ -17,7 +17,30 @@ class App extends Component {
     this.setState({authToken:val})
   }
   updateProductData(val){
-    this.setState({savedProductData:val})
+    let url=[];
+    let data=val;
+    try{
+     data=JSON.parse(val);
+    }catch(ex){}
+    if(data && typeof data!=="string"){
+      if(data.products){
+        for(let i=0;i<data.products.length;i++){
+          url.push(data.products[i].url);
+        }
+      }
+    }
+    fetch('/pricetracker/getCurrentPrice',{
+      headers: {
+        'urlList': JSON.stringify(url)
+      },
+    }).then(data=>data.json()).then(response=>{
+      for(let i=0;i<data.products.length;i++){
+       data.products[i].currentPrice=response.priceData[i];
+      }
+      val=JSON.stringify(data);
+      this.setState({savedProductData:val});
+    });
+    
   }
   addWatchListData({
     imageUrl,
@@ -38,7 +61,6 @@ class App extends Component {
       if(tempData && tempData.products){
         tempData.products.push({imageUrl,dealprice,amazonPrice,productTitle,url,salesPrice});
       }
-      this.setState({savedProductData:tempData});
       fetch('/pricetracker/addToWatchList', {
         method: 'put',
         body: JSON.stringify(tempData),
@@ -48,8 +70,9 @@ class App extends Component {
       }).then(function(response) {
         return response.json();
       }).then(function(data) {
-        // ChromeSamples.log('Created Gist:', data.html_url);
       });
+      this.setState({savedProductData:tempData});
+
     }catch(ex){
       
     }

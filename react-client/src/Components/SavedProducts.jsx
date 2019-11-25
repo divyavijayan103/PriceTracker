@@ -14,7 +14,7 @@ const SavedProducts = ({savedProductdata}) =>{
     if(productData && typeof productData.entries==="function"){
         for (const [index, value] of productData.entries()) {
             items.push(
-                <tr>
+                <tr key={index}>
                     <th scope="row">{index+1}</th>
                     <td>{value.productTitle}</td>
                     {/* <td>{value.originalPrice===''? (value.salesPrice===''?(value.dealPrice===''?value.amazonPrice:value.dealPrice):value.salesPrice):value.originalPrice}</td> */}
@@ -22,6 +22,11 @@ const SavedProducts = ({savedProductdata}) =>{
                         <span>Sale price:{value.salesPrice}</span>
                         <span>Deal price:{value.dealPrice}</span>
                         <span>Amazon price:{value.amazonPrice}</span>
+                    </td>
+                    <td>
+                        <span>Sale price:{value.currentPrice?value.currentPrice.salesPrice:'Same'}</span>
+                        <span>Deal price:{value.currentPrice?value.currentPrice.dealPrice:'Same'}</span>
+                        <span>Amazon price:{value.currentPrice?value.currentPrice.amazonPrice:'Same'}</span>
                     </td>
                     <td><a href={value.url} target="_blank">Amazon Link</a></td>
                 </tr>
@@ -38,7 +43,8 @@ const SavedProducts = ({savedProductdata}) =>{
                 <tr>
                 <th scope="col">#</th>
                 <th scope="col">Product Name</th>
-                <th scope="col">Product Price</th>
+                <th scope="col">Saved Prices</th>
+                <th scope="col">Today's Price</th>
                 <th scope="col">Amazon Site Link</th>
                 </tr>
             </thead>
