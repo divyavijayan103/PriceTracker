@@ -90,3 +90,10 @@ header {
   .hidden{
     display: none !important;
   }
+  .welcomeli{
+    line-height: 2;
+  }
+  .welcomeName{
+    color:#fff;
+
+  }

@@ -62,7 +62,8 @@ module.exports = {
                                     success: true,
                                     message: 'Successfully logged in',
                                     authToken:tokenVal,
-                                    savedProductData:data && data.dataValues && data.dataValues.products
+                                    savedProductData:data && data.dataValues && data.dataValues.products,
+                                    firstName:user.dataValues.firstname
                                 })
                         })
                     }
