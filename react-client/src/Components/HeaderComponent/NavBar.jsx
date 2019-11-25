@@ -9,12 +9,12 @@ class NavBar extends Component {
     if(window.location.href.indexOf('register')>-1){
       obj={
         isLoginSected:false,
-      isRegisterSelected:true  
+        isRegisterSelected:true  
       }
     }
-    if(window.location.href.indexOf('homepage')>-1){
-      obj.displayed=false;
-    }
+    // if(props.authToken!='' && props.authToken!=undefined){
+    //   obj.displayed=false;
+    // }else obj.displayed=true;
     this.state=obj;
     
     this.handleOnClick=this.handleOnClick.bind(this);
@@ -56,7 +56,7 @@ class NavBar extends Component {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarResponsive">
-            <ul className={this.state.displayed===false?"navbar-nav ml-auto hidden":"navbar-nav ml-auto" }>
+            <ul className={(this.props.authToken!=undefined)?"navbar-nav ml-auto hidden":"navbar-nav ml-auto" }>
               {/* <li className="nav-item active">
                 <a className="nav-link" href="#">Home
                 <span className="sr-only">(current)</span>
@@ -67,6 +67,23 @@ class NavBar extends Component {
               </li>
               <li className={this.state.isRegisterSelected? "nav-item active": "nav-item"}>
                 <a className="nav-link" href="/register" onClick={()=>this.handleOnClick('register')}>Register</a>
+              </li>
+              {/* <li className="nav-item">
+                <a className="nav-link" href="#">Contact</a>
+              </li> */}
+            </ul>
+            <ul className={(this.props.authToken!=undefined)?"navbar-nav ml-auto":"navbar-nav ml-auto hidden" }>
+              {/* <li className="nav-item active">
+                <a className="nav-link" href="#">Home
+                <span className="sr-only">(current)</span>
+                </a>
+              </li> */}
+              <li className={this.state.isLoginSected? "nav-item active welcomeli": "nav-item"}>
+                {/* <span className="welcomeName ">Welcome {this.props.firstName} !!</span> */}
+                <a className="nav-link" href="#" >Welcome {this.props.firstName} !!</a>
+              </li>
+              <li className={this.state.isRegisterSelected? "nav-item active": "nav-item"}>
+                <a className="nav-link" href="/login" onClick={()=>this.handleOnClick('logout')}>Logout</a>
               </li>
               {/* <li className="nav-item">
                 <a className="nav-link" href="#">Contact</a>

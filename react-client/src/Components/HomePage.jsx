@@ -5,6 +5,9 @@ class HomePage extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+    if(this.props.authToken===undefined){
+      this.props.history.push('/login');
+    }
   }
   handleButtonClick({imageUrl,dealprice,productTitle,amazonPrice,salesPrice}){
     let data={

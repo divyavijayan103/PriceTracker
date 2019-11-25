@@ -23,6 +23,7 @@ class LoginPage extends Component {
                 if(data.status===200 && data.authToken){
                     _this.props.updateJWTToken(data.authToken);
                     _this.props.updateProductData(data.savedProductData);
+                    _this.props.updateFirstName(data.firstName)
                     _this.props.history.push('/homepage');
                 }
                 

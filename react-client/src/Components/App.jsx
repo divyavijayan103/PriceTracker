@@ -12,9 +12,13 @@ class App extends Component {
     this.updateJWTToken=this.updateJWTToken.bind(this);
     this.updateProductData=this.updateProductData.bind(this);
     this.addWatchListData=this.addWatchListData.bind(this);
+    this.updateFirstName=this.updateFirstName.bind(this);
   }
   updateJWTToken(val){
     this.setState({authToken:val})
+  }
+  updateFirstName(val){
+    this.setState({firstName:val})
   }
   updateProductData(val){
     let url=[];
@@ -80,11 +84,11 @@ class App extends Component {
   render() {
     return (
       <Router>
-        <NavBar />
+        <NavBar authToken={this.state.authToken} firstName={this.state.firstName}/>
         <div className="container">
           <h2>Amazon Price Monitoring</h2>
           {/* <Route name="login" exact path="/login" component={loginPage} /> */}
-          <Route path='/login' render={(props) => <LoginPage {...props} updateJWTToken={this.updateJWTToken} updateProductData={this.updateProductData}/>}/>
+          <Route path='/login' render={(props) => <LoginPage {...props} updateFirstName={this.updateFirstName} updateJWTToken={this.updateJWTToken} updateProductData={this.updateProductData}/>}/>
           <Route path='/homepage' render={(props) => <HomePage {...props} authToken={this.state.authToken} savedProductData={this.state.savedProductData} addWatchListData={this.addWatchListData}/>}/>
           {/* <Route name="home" exact path="/homepage" component={HomePage} /> */}
           <Route name="register" exact path="/register" component={RegisterationPage} />
