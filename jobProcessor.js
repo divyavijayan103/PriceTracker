@@ -1,20 +1,99 @@
 const CDP = require('chrome-remote-interface');
 const chromeLauncher = require('chrome-launcher');
-const ProductData = require('../models').productData;
+const ProductData = require('./models').productData;
+const nodemailer = require('nodemailer');
 
+function createEmailBody(product,newPrice)
+{
+    let text="<p>Hello Customer</p>"+'<br/>';
+        text+='<b>Product Title : </b>'+product.productTitle+'<br/>'+
+        '<b>Old Prices</b>'+
+        '<br/> Sales Price:'+product.salesPrice +'<br/>'+
+        'Amazon Price:'+product.amazonPrice +'<br/>'+
+        'Deal Price:'+product.dealprice +'<br/>'+
+        '<b> New Prices : </b>'+
+        '<br/> Sales Price:'+newPrice.salesPrice +'<br/>'+
+        '<br/> Amazon Price:'+newPrice.amazonPrice +'<br/>'+
+        '<br/> Deal Price:'+newPrice.dealprice +'<br/>'+
+        '<br/><br/><br/>'
+    
+    return text;
+}
+function sendEmailMethod(email,product,newPrice){console.log([email,product])
+    var transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+            user: 'dummyemail@gmail.com',
+            pass: 'dummyemailpassword'
+        }
+  });
+  let body=createEmailBody(product,newPrice)
+  var mailOptions = {
+    from: "divyavijayan199@gmail.com",
+    to:email,
+    subject: 'Price changed for one of saved items!',
+    html: body
+  };
+  transporter.sendMail(mailOptions, function(error, info){
+      console.log(info);
+      console.log(error);
+  });
+}
 function readDatabaseinAdminMode(){
+    let newPrice={
+       salesPrice:10,
+       amazonPrice :0,
+       dealprice:0,
+       originalPrice:0
+    }
     return ProductData.findAll({
         attributes: ['username', 'products']
       }).then(data=>{
-          debugger;
+           let adminData=data;
+           //console.log(adminData);
+           for(let i=0;i<adminData.length;i++){
+            let values=adminData[i].dataValues;
+            let username=values.username;
+            //console.log(values.username);
+           // let email=values.email;
+            let products= JSON.parse(values.products).products;
+            //console.log(products);
+            for(let j=0;j<products.length;j++){
+              //console.log(products[j]);
+                let url=products[j].url;
+                //let storedPrice=products[j].currentPrice;
+                //console.log(storedPrice);
+                let sendEmail=false;
+                //console.log(storedPrice.salesPrice);
+                if(products[j].salesPrice!=""){
+                    let temp = Number(products[j].salesPrice.replace(/[^0-9.-]+/g,""));
+                    console.log(temp);
+                    if(temp>newPrice.salesPrice)
+                        sendEmail=true;
+                }
+                if(products[j].amazonPrice!=""){
+                    let temp = Number(products[j].amazonPrice.replace(/[^0-9.-]+/g,""));
+                    console.log(temp);
+                    if(temp>newPrice.amazonPrice)
+                        sendEmail=true;
+                }
+                if(products[j].dealprice!=""){
+                    let temp = Number(products[j].dealprice.replace(/[^0-9.-]+/g,""));
+                    console.log(temp);
+                    if(temp>newPrice.dealprice)
+                        sendEmail=true;
+                }
+                console.log('hello');
+                if(sendEmail){
+                    sendEmailMethod(username,products[j],newPrice)
+                }
+                // crawl(url).then(data=>{
+                //     console.log(data);
+                // })
+            }
+           }
       });
-    // return ProductData.findOne({ where: { username: username } })
-    // .then(ProductRecord=>{
-    //     return ProductRecord
-    //     .update({
-    //         products:data
-    //     })
-    //   })
+   
 }
 function crawl(url){
     return new Promise(async(resolve, reject)=>{
@@ -45,7 +124,7 @@ function crawl(url){
         console.log('Original Price: ' + originalPriceValue.result.value);
         console.log('DealPrice: ' + dealPriceValue.result.value);
         protocol.close();
-        chrome.kill(); // Kill Chrome.
+        //chrome.kill(); // Kill Chrome.
         let response = {
           originalPrice: originalPriceValue.result && !originalPriceValue.result.subtype? originalPriceValue.result.value: '' ,
           dealprice: dealPriceValue.result &&  !dealPriceValue.result.subtype? dealPriceValue.result.value : '',
@@ -60,11 +139,12 @@ function crawl(url){
     return chromeLauncher.launch({
       // port: 9222, // Uncomment to force a specific port of your choice.
       chromeFlags: [
-        '--headless',
+      
         '--window-size=1920,1280',
         '--disable-gpu'
       ]
     });
   }
 
-console.log("Hello", Date.now())
+console.log("Hello", Date.now());
+readDatabaseinAdminMode();
